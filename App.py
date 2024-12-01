@@ -29,5 +29,4 @@ class App(screen):
 
 	def Run_execution(self,request):
 		request = Req_hand(request).request
-		#print(request)
 		return self.Execution(request)

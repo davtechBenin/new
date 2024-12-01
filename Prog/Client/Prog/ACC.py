@@ -25,8 +25,8 @@ from .Favoris import Favoris
 from .Service_G import Service_G
 from .Demandes import Demandes
 from .Service_T import Service_T
+from .Profile import Profile
 #------
-
 class ACC(Layout):
 	def __init__(self,parent):
 		size = 100,100
@@ -56,7 +56,8 @@ class ACC(Layout):
 			Favoris(self),
 			Service_G(self),
 			Demandes(self),
-			Service_T(self)
+			Service_T(self),
+			Profile(self)
 		]
 		self.Main_Surf = self.Surf_lis[0]
 		self.add_all()
@@ -67,7 +68,8 @@ class ACC(Layout):
 			self.Surf_col,self.Surf_pos,self)
 		Not_set.add_Text("Not yet Set",(1,30),
 			pos = (0,30),text_color = ERROR_COL,
-			text_align = 'center',font_size = 3)
+			text_align = 'center',font_size = 3
+			)
 		
 		ind = TEXT.OPT_LIST.index(ret)
 		if ind > len(lis)-1:
@@ -104,11 +106,12 @@ class ACC(Layout):
 				self.Set_in_action(ret)
 		else:
 			ind = self.MAIN_LAY.Get_Curent_surf()
-			this_ret = self.Opt_surf.Option_list[int(ind)]
-		
-			self.Set_in_action(this_ret)
+			if ind:
+				this_ret = self.Opt_surf.Option_list[int(ind)]
+			
+				self.Set_in_action(this_ret)
 
-			self.Main_Surf.Execution(self.request)
+				self.Main_Surf.Execution(self.request)
 
 		self.add_all()
 
@@ -124,6 +127,8 @@ class Option(Layout):
 		col = parent.Opt_col
 
 		Layout.__init__(self,size,col,pos,parent)
+		self.Set_box_shadow(10,BUT_COL1,
+			rayon_detalement = 2)
 
 
 		self.Element_w = 98
@@ -151,25 +156,29 @@ class Option(Layout):
 		col = MAIN_COL
 		L = Layout(size,col,pos,self)
 
-		L.add_image(url,title,(90,88),(5,2),title)
+		L.add_image(url,title,(75,90),(8,2),title)
 
 		t_size = 1,10
 		T_pos = 0,90
 		L.add_Text(TEXT.LOGO_TEXT,t_size,T_pos,
-			font_size = .96,text_align = 'center')
+			font_size = .96,text_align = 'center',
+			text_color = TEXT_COL4)
 		self.Set_cont_obj(L)
 
 	def Place_opts(self):
 		size = self.But_size
 		X = 3
 		Y = 35
+		Styl = Css()
+		Styl.Set_border_radius(2)
 		for opt in self.Option_list:
 			bg_color = self.Get_bg_color()
 			text_col = OPT_TEXT_COL
 			if opt == self.In_action:
 				bg_color = APP_COL
 				text_col = OPT_ACTION_TEXT_COL
-			self.add_button(f".   {opt}",size,(X,Y),opt,
+			self.add_button(f"{opt}",size,(X,Y),opt,
 				font_size = .9,bg_color = bg_color,
-				text_color = text_col)
+				text_color = text_col,radius = 2,
+				x_dec = 1,inner_x_dec = 2)
 			Y += size[1]

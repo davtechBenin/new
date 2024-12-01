@@ -15,7 +15,7 @@ from ....Client.Prog.ACC import ACC
 
 class Inscription(Layout):
 	def __init__(self,parent):
-		Layout.__init__(self,(100,100),MAIN_COL,
+		Layout.__init__(self,(100,100),APP_COL,
 			(0,0),parent)
 		size = (.6,.9)
 		pos = (.2,.025)
@@ -92,14 +92,14 @@ class Inscription(Layout):
 			if i < ind:
 				C.Set_bg_color(TEXT_COL3)
 			else:
-				C.Set_bg_color(MAIN_COL)
-			C.Set_text_color(TEXT_COL1)
+				C.Set_bg_color(APP_COL)
+			C.Set_text_color(TEXT_COL2)
 			C.Set_text_align("center")
 
 			self.Surf.Set_cont_obj(C)
 			X += 20
 		Txt = bl.p(text)
-		Txt.Set_text_color(TEXT_COL1)
+		Txt.Set_text_color(TEXT_COL3)
 		Txt.Set_text_align("center")
 		Txt.Set_font_size(.9)
 		Txt.Set_size(1,.08)
@@ -115,28 +115,41 @@ class Inscription(Layout):
 			text_color = col,text_align = 'center')
 
 	def add_form(self,liste):
-		F = form.form("insc",action = f"INSC_{self.This_ind+1}")
-		H = 5
+		F = form.form("insc",'INSC',action = f"INSC_{self.This_ind+1}")
+		H = 7
 		Y = 30
+		F.Set_bg_color(self.Surf.Get_bg_color())
 		for part in liste:
 			lab_css = Css()
 			lab_css.Set_display('block')
 			lab_css.Set_size(.24,H)
 			lab_css.Set_position((20,Y+2))
 			lab_css.Set_text_align("left")
-			lab_css.Set_font_size(.8)
+			lab_css.Set_font_size(.9)
+			lab_css.Set_text_color(TEXT_COL2)
 
 			inp_css = Css()
 			inp_css.Set_size(.37,H)
 			inp_css.Set_position((40,Y))
+			inp_css.Set_bg_color(APP_COL)
+			inp_css.Set_border(1,AFF_COL)
+			inp_css.Set_text_color(TEXT_COL2)
 
-			F.Set_text_input(part,inp_style = inp_css,
+			if 'de pass' in part:
+				F.Set_password_input(part,inp_style = inp_css,
 				lab_style = lab_css,required = True)
+			else:
+				F.Set_text_input(part,inp_style = inp_css,
+					lab_style = lab_css,required = True)
 			Y += 10
 
 		But_css = Css()
-		But_css.Set_size(.2,.06)
-		But_css.Set_position((58,Y+3))
+		But_css.Set_size(.3,.06)
+		But_css.Set_position((.48,Y+3))
+		But_css.Set_bg_color(APP_COL)
+		But_css.Set_border(1,AFF_COL)
+		But_css.Set_text_color(TEXT_COL3)
+		But_css.Set_border_radius(2)
 		F.End_form(submit_name = "Suivant",
 			Submit_style = But_css)
 		self.Surf.Set_cont_obj(F)

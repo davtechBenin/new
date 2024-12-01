@@ -7,6 +7,8 @@ from Import_lay import *
 
 from Prog.general.Prog import TEXT as TEXT2
 
+from Prog.Services.Service_surf import Services_lay
+
 class Service_G(Layout):
 	def __init__(self,parent):
 		size = parent.Surf_size
@@ -40,7 +42,7 @@ class Service_G(Layout):
 
 		sw,sh = self.Surface_size = pw,100 - ph-int_h
 		sx,sy = self.Surface_pos = int_w,ph + int_h*.5
-		self.Surface_col = MAIN_COL
+		self.Surface_col = APP_COL
 
 	def add_service_F(self):
 		size = self.service_F_size
@@ -48,7 +50,7 @@ class Service_G(Layout):
 		col = self.service_F_col
 		service_F = Layout(size,col,pos,self)
 		service_F.Set_overflow()
-
+		service_F.Set_box_shadow(10,AFF_COL)
 		X_dep = 3
 		X = 0
 		Y = self.S_text_Y
@@ -56,20 +58,19 @@ class Service_G(Layout):
 			service_F.add_button(i,self.S_text_size,
 				(X,Y),Info = i,font_size = .9,
 				text_align = 'center',
+				text_color = TEXT_COL2,
 				bg_color = self.S_text_bg_color)
 			X += self.S_text_size[0]+X_dep
 		
 		self.Set_cont_obj(service_F)
 
 	def add_Surface(self):
-		size = self.Surface_size
-		pos = self.Surface_pos
-		col = self.Surface_col
-		Surface = Layout(size,col,pos,self)
+		self.Services_size = self.Surface_size
+		self.Services_pos = self.Surface_pos
+		self.Services_col = self.Surface_col
 
-		Surface.add_Text(self.Serv,(1,30),(0,30),
-			text_color = TEXT_COL3,font_size = 2,
-			text_align = "center")
+		Surface = Ser_S(self)
+		#Surface.Info_set(self.Serv)
 		self.Set_cont_obj(Surface)
 
 	def Ret_handler(self,ret):
@@ -83,3 +84,13 @@ class Service_G(Layout):
 	def Execution(self,request):
 		ret = request.get('request')
 		self.Ret_handler(ret)
+
+
+class Ser_S(Services_lay):
+	def __init__(self,parent):
+		Services_lay.__init__(self,parent)
+
+
+	def Info_set(self):
+		self.Info_txt = f'Infos Générale de {self.parent.Serv}'
+

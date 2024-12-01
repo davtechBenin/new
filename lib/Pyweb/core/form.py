@@ -59,23 +59,31 @@ class form(balise):
 			return style
 		return ''
 
-	def Begin_field(self,title):
+	def Begin_field(self,title,field_style = None,**inp_style):
 		self.Field = balise('fieldset')
 		leg = balise('legend')
+		leg._No_css = True
 		leg.Set_cont_obj(title)
 		self.Field.Set_cont_obj(leg)
+		if field_style:
+			self.Field.Set_style(field_style)
 
 	def End_field(self):
 		self.Set_cont_obj(self.Field)
 		self.Field = None
 
 	def Set_input(self,Type,name,inp_style = None,
-		lab_style = None,**attrs_dic):
+		lab_style = None,lab = True,required = True,
+		**attrs_dic):
+	#
 		Inp = baliseOrph('input')
 		Inp.Set_attr('type',Type)
 		Inp.Set_attr('name',name)
 		Inp.Set_attr('id',name)
-		if Type!= 'submit':
+		if required:
+			Inp.Set_attr("required",'required')
+
+		if Type!= 'submit' and lab == True:
 			self.Set_label(name,style = lab_style,
 				**{'for':name})
 		Inp.Set_attrs(attrs_dic)
@@ -158,6 +166,7 @@ class form(balise):
 				cols pour définir le nombre de colonnes à afficher
 		'''
 		tex = balise('textarea')
+		attrs_dic["name"] = name
 		tex.Set_attrs(attrs_dic)
 		tex.Set_style(style)
 		if self.Field:
@@ -217,6 +226,7 @@ class form(balise):
 		attrs_dic['value'] = submit_name
 		self.Set_input('submit',self.ident,Submit_style,**attrs_dic)
 
+'''
 class checkBox(balise):
 	def __init__(self):
 		balise.__init__('p')
@@ -262,10 +272,10 @@ class checkBox(balise):
 class radioButton(balise):
 	def __init__(self,name):
 		balise.__init__(self,'p')
-		'''
+		"""
 			Pour cette partie, le nom est unique et utiliser 
 			pour toutes les box mais la valeur diffère
-		'''
+		"""
 		self.name = name
 
 	def Set_title(self,cont,style = None):
@@ -330,3 +340,6 @@ class formList(balise):
 		self.Set_cont_obj(self.Sel)
 		del self.Sel
 
+
+
+'''

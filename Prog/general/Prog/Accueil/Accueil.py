@@ -12,7 +12,7 @@ import urllib
 class Main(Layout):
 	def __init__(self,parent):
 		size = 1,1
-		bg_color = MAIN_COL
+		bg_color = APP_COL
 		pos = (0,0)
 		Layout.__init__(self,size,bg_color,pos,parent)
 
@@ -66,36 +66,27 @@ class Present(Layout):
 
 	def CSS(self):
 		self.log_css = Css()
-		self.log_css.Set_size(.3,.4)
+		self.log_css.Set_size("200px","200px")
 		self.log_css.Set_position((2.5,5))
 
-		self.Descip_css = Css()
-		#self.Descip_css.Set_display("inline")
-		self.Descip_css.Set_size(.6,.3)
-		self.Descip_css.Set_position((35,10))
-
-
-		self.Object_css = Css()
-		self.Object_css.Set_size(.96,.5)
-		self.Object_css.Set_position((2.5,45))
-		
 	def Render(self):
-		logo = bl.image("/static/general/logo.jpg","logo Rupin")
+		logo = bl.image(TEXT.LOGO,
+			"logo Rupin")
 		logo.Set_style(self.log_css)
+		logo.Set_border_radius(30)
+		logo.Set_box_shadow(2,AFF_COL)
 
-		Descip = Layout((.6,.3),self.Get_bg_color(),
-			(35,10),self)
-		#Descip.Set_style(self.Descip_css)
+		Descip = Layout((.6,.3),None,
+			("250px",10),self)
 		Descip.add_title('Le Rupin',(.8,.2),(.1,0),
-			bg_color = None,text_color = MAIN_COL)
-		Descip.add_Text("Bref description",(.8,.8),(.1,.22),bg_color = None
-			,font_size = .9,text_color = MAIN_COL)
-
-		Object = Layout((.96,.5),self.Get_bg_color(),
-			(2.5,45),self)
-		#Object.Set_style(self.Object_css)
-		Object.add_title('Notre objectif',(.8,.1),(.1,0),
 			bg_color = None,text_color = TEXT_COL2)
+		Descip.add_Text("Bref description",(.8,.8),(.1,.22),bg_color = None
+			,font_size = .9,text_color = TEXT_COL2,)
+
+		Object = Layout((.96,.5),None,
+			(2.5,"210px"),self)
+		Object.add_title('Notre objectif',(.8,.1),(.1,0),
+			bg_color = None,text_color = TEXT_COL2,)
 		Object.add_Text("L'objectif de votre organisation",(.8,.8),(.1,.15)
 			,bg_color = None,font_size = .9
 			,text_color = TEXT_COL2)
@@ -116,46 +107,53 @@ class Connexion(Layout):
 
 	def Foreign_surf(self):
 		self.add_Text(TEXT.Con,(1,.3),(0,0),
-			text_color = TEXT_COL1,text_align = 'center',
+			text_color = TEXT_COL2,text_align = 'center',
 			font_size = .86)
 
 		F_css = Css()
 		F_css.Set_size(1,.4)
 		F_css.Set_position((0,30))
+		F_css.Set_bg_color(AFF_COL)
 
 		inp_css = Css()
 		inp_css.Set_size(.55,.2)
 		inp_css.Set_position((32,0))
+		inp_css.Set_bg_color(APP_COL)
+		inp_css.Set_border(1,AFF_COL)
+		inp_css.Set_text_color(TEXT_COL2)
 
 		lab_css = Css()
 		lab_css.Set_size(.3,.15)
 		lab_css.Set_position((0,5))
+		lab_css.Set_text_color(TEXT_COL2)
 		lab_css.Set_display("block")
 		lab_css.Set_text_align('right')
 		lab_css.Set_font_size(.8)
 
-		self.F = form.form("Connexion",action="/Accueil/Conn")
+		self.F = form.form("Connexion","Connexion",action="/Accueil/Conn")
 		self.F.Set_style(F_css)
 		self.F.Set_email_input(TEXT.EMAIL,inp_style = inp_css,
 			lab_style = lab_css)
-		lab_css = Css()
+		#lab_css = Css()
 		lab_css.Set_size(.3,.15)
 		lab_css.Set_display("block")
 		lab_css.Set_text_align('right')
 		lab_css.Set_font_size(.8)
 		lab_css.Set_position((0,35))
 
-		inp_css = Css()
+		#inp_css = Css()
 		inp_css.Set_size(.55,.2)
-		#inp_css.Set_bg_color(MAIN_COL)
 		inp_css.Set_position((32,30))
 		self.F.Set_password_input(TEXT.PASS,inp_style = inp_css,
 			lab_style = lab_css)
 
-		inp_css = Css()
+		#inp_css = Css()
 		inp_css.Set_size(.7,.23)
 
 		inp_css.Set_position((15,65))
+		inp_css.Set_text_color(TEXT_COL3)
+		inp_css.Set_bg_color(BUT_COL1)
+		inp_css.Set_border_radius(2)
 		
 		self.F.End_form(submit_name = TEXT.VALIDER,
 			Submit_style = inp_css)
@@ -171,7 +169,7 @@ class Connexion(Layout):
 		Conn_Css.Set_position((15,73))
 
 		#L = urllib.parse.urlencode({"request":"SAVE_NEW"})
-		L = "/Accueil/INSC_0"
+		L = "/INSC_0"
 		A = bl.anchor(L,"Pas encode de compte?")
 		A.Set_style(Conn_Css)
 
@@ -179,7 +177,7 @@ class Connexion(Layout):
 		Erro_css.Set_size(1,.2)
 		Erro_css.Set_position((0,7))
 		Erro_css.Set_text_align('center')
-		Erro_css.Set_text_color((128,0,0))
+		Erro_css.Set_text_color(ERROR_COL)
 		Erro_css.Set_font_size(.8)
 
 		P = bl.p(self.Error_txt)
@@ -212,39 +210,36 @@ class Services(Layout):
 		Cont_css.Set_display("block")
 
 		bg_img_css = Css()
-		bg_img_css.Set_size(1,1)
-		bg_img_css.Set_position((0,0))
+		bg_img_css.Set_size(.4,.7)
+		bg_img_css.Set_position((.3,7))
+		bg_img_css.Set_border_radius(20)
 
 		bg_img = bl.image(image,'img')
 		bg_img.Set_style(bg_img_css)
-
 
 		log_css = Css()
 		log_css.Set_size(.15,.3)
 		log_css.Set_position((2.5,5))
 
-		log = bl.image("/static/general/logo.jpg","")
+		log = bl.image(TEXT.LOGO,"")
 		log.Set_style(log_css)
-
 		
 		T_css = Css()
 		T_css.Set_size(1,.48)
-		T_css.Set_position((0,40))
-		T_css.Set_opacity(.7)
-		T_css.Set_bg_color(OPTION_COL)
+		T_css.Set_position((0,60))
 		T_css.Set_text_color(TEXT_COL2)
 		T_css.Set_text_align("center")
 		
 		T = bl.p(titre)
 		T.Set_style(T_css)
 
-		L = urllib.parse.urlencode({"request":f"Service {titre}"})
-		L = "/SERV"+"?"+L
+		g = titre.split(' ')
+		g = "".join(g)
+		L = "/SERV/"+g
 
 		Cont = bl.anchor(L,"")
 		Cont.Set_style(Cont_css)
 		Cont.Set_cont_obj(bg_img)
-		Cont.Set_cont_obj(log)
 		Cont.Set_cont_obj(T)
 
 		self.Set_cont_obj(Cont)
@@ -269,7 +264,7 @@ class Services_T(Layout):
 				text_color = TEXT_COL4,font_size = .8,
 				bg_color = None)
 			self.add_Text(num,(70,.2),(X2,Y),
-				text_color = TEXT_COL1,font_size = .9,
+				text_color = TEXT_COL2,font_size = .9,
 				bg_color = None)
 			Y += 20
 

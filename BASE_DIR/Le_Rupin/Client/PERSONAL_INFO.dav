@@ -1,0 +1,1 @@
+dict:[str:->Nom;|:|str:->az; :;;; str:->Prénom;|:|str:->dav; :;;; str:->Date de naissance;|:|str:->dd; :;;; str:->Genre;|:|str:->M; :;;; ]

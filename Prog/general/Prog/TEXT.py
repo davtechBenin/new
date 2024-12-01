@@ -6,19 +6,20 @@ PASS = 'password'
 VALIDER = 'Connexion'
 
 SERVICE = 'Nos services'
+LOGO = "/static/general/logo.jpg"
 
 Serv_dic = {
-	"Agronomie":'/static/general/agron.jpg',
-	"BTP":'/static/general/btp.jpg',
-	"Enseignement":'/static/general/ensei.jpg',
-	"Finance":'/static/general/finan.jpg',
-	"Le Droit":'/static/general/juri.jpg',
-	"Services mobiliers":'/static/general/mobil.jpeg',
-	"La Santée":'/static/general/sante.jpg',
-	"Sécurité":'/static/general/securi.jpg',
-	"Service social":'/static/general/social.jpg',
-	"Stylisme":'/static/general/style.jpg',
-	"Location de voiture (VTC)":'/static/general/vtc.jpg',
+	"Agronomie":LOGO,
+	"BTP":LOGO,
+	"Enseignement":LOGO,
+	"Finance":LOGO,
+	"Le Droit":LOGO,
+	"Services mobiliers":LOGO,
+	"La Santée":LOGO,
+	"Sécurité":LOGO,
+	"Service social":LOGO,
+	"Stylisme":LOGO,
+	"Location de voiture (VTC)":LOGO,
 }
 
 Cont_text = 'Services Technique'

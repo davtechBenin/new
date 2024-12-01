@@ -74,6 +74,17 @@ class General:
 		else:
 			return None
 
+	def Set_this_client_info(self,email,m_pas):
+		dic = self.get_client()
+		key = "CLT_RUPIN"
+		info = dic.get(email)
+		if info:
+			m_p,ind = info
+			dic[email] = [m_pas,ind]
+			self.Clt_Base.change_password(ind,m_pas)
+			self.Add_data(key,dic)
+
+
 # Gestion des employers
 	def add_employer(self,data):
 		key = "EMP_RUPIN"

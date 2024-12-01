@@ -24,25 +24,46 @@ class Layout(wid):
 			style_obj)
 		self.MAIN_LAY = parent.MAIN_LAY
 
+	def Set_BASE(self):
+		pass
 
 	def add_all(self):
 		self.init_list()
+		self.Set_BASE()
 		self.Foreign_surf()
 
 	def Foreign_surf(self):
 		pass
 
 	def Execution(self,request):
+		ret = request.get('request')
+		part = request.get('part_request')
+		form = request.get("form")
+		if part:
+			self.Part_handler(part)
+		elif ret:
+			self.Ret_handler(ret)
+		elif form:
+			self.Form_handler(form)
+		self.add_all()
+
+	def Form_handler(self,form):
 		pass
 
 	def Ret_handler(self,ret):
+		pass
+
+	def Part_handler(self,part):
 		pass
 
 	def Set_cookies(self,cookie,*param):
 		pass
 
 	def get_cookies(self):
-		pass
+		return self.MAIN_LAY.Get_cookies()
+
+	def get_ident(self):
+		return self.MAIN_LAY.Get_ident_cookies()
 
 
 

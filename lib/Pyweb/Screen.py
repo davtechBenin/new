@@ -11,11 +11,13 @@ except ModuleNotFoundError:
 	import core.balises
 	from core.style import style
 
+from .Main_Layout import Main_Layout
+
 import webbrowser
 
 class screen:
 	def __init__(self,titre = "PyWeb",
-		css_file = str()):
+		css_file = ""):
 		self.titre = titre
 		self.css_file = css_file
 		self.MAIN_LAY = self
@@ -35,7 +37,7 @@ class screen:
 		self.Body = balises.body()
 		self.parent = self.Body
 
-		self.Layout_list = list()
+		self.Layout = Main_Layout(self,(0,0,0))
 
 	def Foreign_surf(self):
 		pass
@@ -52,7 +54,24 @@ class screen:
 		self.Layout = layout
 		#self.Body.Set_cont_obj(bal_obj)
 
+	def Generate_css_file(self):
+		from pathlib import Path as ph
+		work_dir = ph.cwd()
+		if self.css_file:
+			name = self.css_file
+			dirs = name.split("/")
+			if len(dirs)>1:
+				for di in dirs[:-1]:
+					work_dir = work_dir.joinpath(di)
+					if not work_dir.exists():
+						work_dir.mkdir()
+			name = work_dir/dirs[-1]
+			with open(name,'w') as fic:
+				fic.write(self.Layout.Get_css())
+
+
 	def End_page(self):
+		#self.Generate_css_file()
 		body = self.Body.Run_html()
 		self.HTML_page+=body
 		self.HTML_page+='\n</html>'

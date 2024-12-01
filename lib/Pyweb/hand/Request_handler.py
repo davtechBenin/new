@@ -25,25 +25,20 @@ class Req_hand:
 		part_request = self.Url_path(REQ.get("REQUEST_URI"))
 		cookies = self.get_cookies(REQ.get("HTTP_COOKIE"))
 		lieu = self.get_lieu(REQ.get("HTTP_USER_AGENT"))
-
-
+		file = red.files
 		req = {
 			"method":method,
 			"form":form,
 			"request":request,
 			"part_request":part_request,
 			"cookies":cookies,
-			"lieu":lieu
+			"lieu":lieu,
+			'file':file
 		}
 		return req
-		#"""
-		#return dict()
 
 	def get_lieu(self,text):
-		#nav,ordi = text.split("(")
-		#ordi,other = ordi.split(")")
-		#ordi = ordi.split(";")
-		#lieu = nav + ' '.join(ordi[0:-1])
+		
 		return text
 
 	def get_cookies(self,text):

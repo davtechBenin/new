@@ -15,13 +15,19 @@ except ModuleNotFoundError:
 class balise(style):
 	def __init__(self,bal,**style_args):
 		style.__init__(self,**style_args)
+		self.init()
 		self.bal = bal
 		self._No_css = False
-		self.init()
+		#if:
+		#	self.Set_css_name)
+
+		self.Curent_id = int()
+		
 #
 	def init(self):
 		self.attrs = str()
 		self.Cont = str()
+		self.Foreign_STYLE = str()
 		self.attrs_dic = dict()
 		self.span_names = list()
 		self.All_css = str()
@@ -36,11 +42,10 @@ class balise(style):
 	def Foreign_surf(self):
 		pass
 
-	def Set_span_cont(self,cont,css_name,attrs_dic = dict()):
+	def Set_span_cont(self,cont,attrs_dic = dict()):
 		sp = balise('span')
 		sp.Set_cont(cont)
 		sp.Set_attrs(attrs_dic)
-		self.span_names+=css_name
 		self.Set_cont(sp)
 
 	def Set_cont(self,cont):
@@ -50,8 +55,13 @@ class balise(style):
 		if type(cont_obj) == str:
 			self.Cont+=cont_obj
 		else:
+			cont_obj = self.Update_cont_obj(cont_obj)
 			self.el_list.append(cont_obj)
 			self.Cont+=cont_obj.Run_html()
+
+	def Update_cont_obj(self,cont_obj,P = False):
+		
+		return cont_obj
 
 	def Modif_cont(self,cont):
 		self.Cont = cont
@@ -64,12 +74,20 @@ class balise(style):
 		self.attrs_dic[attr] = value
 		self.attrs += f' {At}'
 
+	def Get_attrs(self):
+		self.attrs = str()
+		for key,val in self.attrs_dic.items():
+			self.attrs += f' {key}="{val}"'
+
 	def Set_css_name(self,name):
 		self.Set_attr('class',name)
 		self.css_n = True
 
 	def Get_css_name(self):
 		return f".{self.Get_attr('class')}"
+
+	def Get_css_name_(self):
+		return f"{self.Get_attr('class')}"
 
 	def Set_attrs(self,attrs_dic):
 		for attr_name in attrs_dic:
@@ -101,16 +119,18 @@ class balise(style):
 		"""
 		self.Set_attr("align",side)
 
+	def Get_css(self):
+		my_css = self.Run_css_(self.Get_css_name())
+		my_css += f"\n{self.Foreign_STYLE}"
+		return my_css
+
 	def Run_html(self):
 		if not self._No_css:
-			self.Run_css_only()
-			self.Set_attr("style",self.cont)
+			styl = self.Run_css_only()
+			self.Set_attr("style",styl)
+		self.Get_attrs()
 		Ct = f"""\n<{self.bal} {self.attrs}>\n{self.Cont}\n</{self.bal}>\n"""
 		return Ct
-
-class div(balise):
-	def __init__(self,**style_args):
-		balise.__init__(self,'div',**style_args)
 
 class baliseOrph(balise):
 	def __init__(self,bal,**style_args):
@@ -119,6 +139,7 @@ class baliseOrph(balise):
 	def Run_html(self):
 		self.Run_css_only()
 		self.Set_attr("style",self.cont)
+		self.Get_attrs()
 		Ct = f"""\n<{self.bal} {self.attrs}/>"""
 		return Ct
 
@@ -138,7 +159,7 @@ class head(balise):
 		self.Cont = mi
 
 	def Set_css_file(self,file_name):
-		a = f'<link rel = "{self.rel}" type="text/css" href="{file_name}"'
+		a = f'\n\t<link rel = "{self.rel}" type="text/css" href="{file_name}"/>'
 		self.Cont += a
 
 class header(balise):
@@ -290,7 +311,7 @@ class div(balise):
 
 class image(baliseOrph):
 	def __init__(self,src,alt):
-		balise.__init__(self,'img')
+		baliseOrph.__init__(self,'img')
 		self.Set_attr('src',src)
 		self.Set_attr('alt',alt)
 
@@ -301,7 +322,7 @@ class img1ToImg2(anchor):
 	def __init__(self,srcimg1,srcimg2,alt,title = "Click here"):
 		img = image(srcimg1,alt)
 		img.Set_title(title)
-		anchor.__init__(self.srcimg2,img.Run())
+		anchor.__init__(self,srcimg2,img.Run(),'')
 
 class figure(balise):
 	def __init__(self,El,legende,**style_args):
@@ -311,6 +332,7 @@ class figure(balise):
 		self.Set_cont(cp)
 
 #Reste à revoir après la doc.
+"""
 class table:
 	def __init__(self):
 		self = balise(self,'table')
@@ -407,3 +429,5 @@ class form(balise):
 		pass
 		
 
+
+"""

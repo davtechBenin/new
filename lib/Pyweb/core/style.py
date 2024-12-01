@@ -4,11 +4,16 @@ def transform(x):
 	if type(x) != str:
 		if x <= 1:
 			x*=100
-	return (f"{x}%")
+		return (f"{x}%")
+	else:
+		return x
 
 def transform_to_int(x):
 	if type(x) == str:
-		pass
+		if 'px' in x:
+			x = float(x[:-2])
+		elif "%" in x:
+			x = float(x[:-1])
 	else:
 		if x <= 1:
 			x*=100
@@ -18,15 +23,22 @@ class style:
 	def __init__(self,size = (100,100),
 		bg_color = None,font_size = .97,
 		pos = (0,0),pos_type = "absolute"):
+	#
 		self.cont = str()
 		self.Css_dict = dict()
 
-		self.Set_position_type(pos_type)
-		self.Set_position(pos)
+		
+		if pos:
+			self.Set_position_type(pos_type)
+			self.Set_position(pos)
 		self.Set_font_family('Lexend')
+		self.Add_css('box-sizing','border-box')
 		if bg_color:
 			self.Set_bg_color(bg_color)
-		self.Set_size(*size)
+		else:
+			self.bg_color = None
+		if size:
+			self.Set_size(*size)
 		self.Set_font_size(font_size)
 
 	def Init_css(self):
@@ -52,6 +64,9 @@ class style:
 			return self.pos[ind]
 		else:
 			return self.pos
+
+	def Get_pos(self,ind = None):
+		return self.Get_position(ind)
 
 # Définition des style
 	def Set_style(self,Obj_css):
@@ -119,21 +134,24 @@ class style:
 
 	def Set_position(self,pos):
 		x,y = pos
-		x = transform_to_int(x)
-		y = transform_to_int(y)
+		
+		x_ = transform_to_int(x)
+		y_ = transform_to_int(y)
+		if type(x) == str:
+			X = x
+		else:
+			X = transform(x)
+		if type(y) == str:
+			Y = y
+		else:
+			Y = transform(y)
 
-		self.pos = x,y
-		self.Add_css("left",f"{x}%")
-		self.Add_css("top",f"{y}%")
+		self.pos = x_,y_
+		self.Add_css("left",X)
+		self.Add_css("top",Y)
 
 	def Set_position_type(self,typ = 'absolute'):
 		self.Add_css('position',typ)
-
-	def Set_margin(self,value):
-		self.Add_css('margin',value)
-
-	def Set_padding(self,value):
-		self.Add_css('padding',value)
 
 	def Set_font_size(self,value,Type = "em"):
 		# Type peut être 'em' 'px' '%'
@@ -244,48 +262,132 @@ class style:
 		# value est comprise entre 0 et 1
 		self.Add_css('opacity',value)
 
-	def Set_border(self,option_dict = dict()):
-		"""
-			Les value possible du dictionnaire sont les suivants:
-				width
-				color
-				style
-				position (top,bottom,left,right)
-		"""
-		dic = {
-			"width":"border-width",
-			"color":"border-color",
-			"style":"border-style",
-			"radius":"border-radius",
-		}
-		if 'position' in option_dict:
-			pos = option_dict['position']
-			pos = pos.split(' ')
-			va = str()
-			for i in pos:
-				va+=f"{i}-"
+# border
+	def Set_border(self,value,typ = 'solid',
+		color = (0,0,0)):
+		#la valeur est en pixel
+		self.Add_css('border-width',f"{value}px")
+		self.Add_css('border-style',typ)
+		self.Add_css('border-color',f"rgb{color}")
 
-			va = va[:-2]
-			pos_value = f"border-{va}"
-			self.Add_css(pos_value,option_dict['position'])
-		for op in option_dict:
-			self.Add_css(dic[op],option_dict[op])
+	def Set_top_border(self,value,typ = 'solid',
+		color = (0,0,0)):
+		#la valeur est en pixel
+		self.Add_css('border-top-width',f"{value}px")
+		self.Add_css('border-top-style',typ)
+		self.Add_css('border-top-color',f"rgb{color}")
 
-	def Set_shadow(self,Hd,Vd,sh,color,colortype='rgb',shadowtype = 'box'):
-		pr = f'{shadowtype}-shadow'
+	def Set_bottom_border(self,value,typ = 'solid',
+		color = (0,0,0)):
+		#la valeur est en pixel
+		self.Add_css('border-bottom-width',f"{value}px")
+		self.Add_css('border-bottom-style',typ)
+		self.Add_css('border-bottom-color',f"rgb{color}")
+
+	def Set_right_border(self,value,typ = 'solid',
+		color = (0,0,0)):
+		#la valeur est en pixel
+		self.Add_css('border-right-width',f"{value}px")
+		self.Add_css('border-right-style',typ)
+		self.Add_css('border-right-color',f"rgb{color}")
+
+	def Set_left_border(self,value,typ = 'solid',
+		color = (0,0,0)):
+		#la valeur est en pixel
+		self.Add_css('border-left-width',f"{value}px")
+		self.Add_css('border-left-style',typ)
+		self.Add_css('border-left-color',f"rgb{color}")
+
+# Radius
+	def Set_border_radius(self,value,
+		typ = "em"):
+		if type(value) in (float,int):
+			value = f"{int(value)}{typ}"
+		self.Add_css('border-top-left-radius',value)
+		self.Add_css('border-top-right-radius',value)
+		self.Add_css('border-bottom-left-radius',value)
+		self.Add_css('border-bottom-right-radius',value)
+
+	def Set_border_top_left_radius(self,value,
+		typ = "em"):
+		if type(value) in (float,int):
+			value = f"{int(value)}{typ}"
+		self.Add_css('border-top-left-radius',value)
+
+	def Set_border_top_right_radius(self,value,
+		typ = "em"):
+		if type(value) in (float,int):
+			value = f"{int(value)}{typ}"
+		self.Add_css('border-top-right-radius',value)
+
+	def Set_border_bottom_left_radius(self,value,
+		typ = "em"):
+		if type(value) in (float,int):
+			value = f"{int(value)}{typ}"
+		self.Add_css('border-bottom-left-radius',value)
+
+	def Set_border_bottom_right_radius(self,value,
+		typ = "em"):
+		if type(value) in (float,int):
+			value = f"{int(value)}{typ}"
+		self.Add_css('border-bottom-right-radius',value)
+
+# Padding
+	def Set_padding(self,value,typ = 'em'):
+		self.Add_css("padding",f"{value}{typ}")
+
+	def Set_padding_top(self,value,typ = 'em'):
+		self.Add_css("padding-top",f"{value}{typ}")
+
+	def Set_padding_left(self,value,typ = 'em'):
+		self.Add_css("padding-left",f"{value}{typ}")
+
+	def Set_padding_right(self,value,typ = 'em'):
+		self.Add_css("padding-right",f"{value}{typ}")
+
+	def Set_padding_bottom(self,value,typ = 'em'):
+		self.Add_css("padding-bottom",f"{value}{typ}")
+
+# Margin
+	def Set_margin(self,value,typ = 'em'):
+		self.Add_css("margin",f"{value}{typ}")
+
+	def Set_margin_top(self,value,typ = 'em'):
+		self.Add_css("margin-top",f"{value}{typ}")
+
+	def Set_margin_left(self,value,typ = 'em'):
+		self.Add_css("margin-left",f"{value}{typ}")
+
+	def Set_margin_right(self,value,typ = 'em'):
+		self.Add_css("margin-right",f"{value}{typ}")
+
+	def Set_margin_bottom(self,value,typ = 'em'):
+		self.Add_css("margin-bottom",f"{value}{typ}")
+
+#Shadow
+	def Set_box_shadow(self,rayon_flou,color,
+		rayon_detalement = .3,colortype='rgb',
+		inset = False,
+		unit_typ = "px",off_x = 0,off_y = 0):
+
+		pr = f'box-shadow'
 		if colortype =='#':
 			color = f'#{color}'
 		elif colortype:
 			color = f'{colortype}{color}'
-		value = f"{Hd} {Vd} {sh} {color}"
+		value = f"{off_x}{unit_typ} {off_y}{unit_typ} {rayon_flou}{unit_typ} \
+{rayon_detalement}{unit_typ} {color}"
+		if inset:
+			value = "inset "+value
 		self.Add_css(pr,value)
 
+# Runs
 	def Run_css(self,select):
 		self.cont = self.Run_css_only()
 		cont = f"""{select}"""
 		cont+="{"
 		cont+=f'{self.cont}'
-		cont+='\n}'
+		cont+='}'
 		return cont
 
 	def Run(self):
@@ -295,8 +397,10 @@ class style:
 		return self.Run_css(select)
 
 	def Run_css_only(self):
+		self.cont = str()
 		for key,val in self.Css_dict.items():
-			self.cont+=f'{key}: {val};\n'
+			self.cont+=f'\n\t{key}: {val};'
+		self.cont+='\n'
 		return self.cont
 
 	def Set_grid_column(self,start,end):

@@ -5,11 +5,14 @@
 """
 from . import Connection as CN
 from random import choice
+from lib.DAV_BASE.MyData import TODAY
 
 class Client:
 	def __init__(self):
 		self.dossier = 'Le_Rupin'
 		self.fichier = 'Client'
+
+		self.Finance_key = 'Finance'
 
 # Fichier temporaire
 	def Save_temp(self,key,dic):
@@ -134,6 +137,115 @@ class Client:
 		if not Pers:
 			Pers = dict()
 		return Pers
+
+# Gestion des finances
+	def add_solde(self,ident,montant):
+		key = self.Finance_key+"/solde"
+		solde = self.get_solde()
+		solde += float(montant)
+		self.Add_data(ident,key,solde)
+		hist = {
+			"motif":"solde",
+			"montant":montant
+		}
+		self.add_historique(ident,hist)
+
+	def get_solde(self,ident):
+		key = self.Finance_key+"/solde"
+		solde = self.Get_data(ident,key)
+		if not solde:
+			solde = float()
+		return float(solde)
+
+	def add_cmd(self,ident,montant):
+		key = self.Finance_key+"/cmd"
+		cmd = self.get_cmd()
+		cmd += float(montant)
+		self.Add_data(ident,key,cmd)
+		hist = {
+			"motif":"cmd",
+			"montant":montant
+		}
+		self.add_historique(ident,hist)
+
+	def get_cmd(self,ident):
+		key = self.Finance_key+"/cmd"
+		cmd = self.Get_data(ident,key)
+		if not cmd:
+			cmd = float()
+		return float(cmd)
+
+	def init_cmd(self,ident):
+		m = float()
+		key = self.Finance_key+"/cmd"
+		self.Add_data(ident,key,m)
+
+	def add_historique(self,ident,hist):
+		"""
+			hist doit être:
+				motif (solde ou cmd)
+				montant
+		"""
+		moti = hist['motif']
+		mont = hist['montant']
+		key = self.Finance_key+"/historique"
+
+		dic = self.get_historique(ident)
+		date = TODAY().date__
+		heur = TODAY().hour
+		D = {
+			"Montant":mont,
+			"Heur":heur
+		}
+		date_dict = dic.get(date,dict())
+		motif_liste = date_dict.get(moti)
+		motif_liste.append(D)
+		date_dict[moti] = motif_liste
+		dic[date] = date_dict
+		self.Add_data(ident,key,dic)
+
+	def get_historique(self,ident):
+		key = self.Finance_key+"/historique"
+		his_dic = self.Get_data(ident,key)
+		if not his_dic:
+			his_dic = dict()
+		return his_dic
+
+# la gestion des Messages
+	def send_sms(self,ident,mes):
+		key = "message"
+		typ = 'Send'
+		dic = self.get_mes_dic(typ,mes)
+		lis = self.get_sms(ident)
+		lis.append(dic)
+		self.Add_data(ident,key,lis)
+
+	def receive_sms(self,ident,mes):
+		key = "message"
+		typ = 'Receive'
+		dic = self.get_mes_dic(typ,mes)
+		lis = self.get_sms(ident)
+		lis.append(dic)
+		self.Add_data(ident,key,lis)
+
+	def get_sms(self,ident):
+		key = "message"
+		lis = self.Get_data(ident,key)
+		if not lis:
+			lis = list()
+		return lis
+
+	def get_mes_dic(self,typ,mes):
+		date = TODAY().date__
+		dic = {
+			typ:{
+				"Message":mes,
+				"Date":date,
+				'Heure':TODAY().hour
+			}
+		}
+		return dic
+
 
 
 
