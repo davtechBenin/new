@@ -16,9 +16,9 @@ from Prog.main import main
 class App(screen):
 	def __init__(self):
 		size = 100,100
-		bg_color = MAIN_COL
+		bg_color = DISABLE_BUT3
 		pos = (0,0)
-		titre = "Le Rupin"
+		titre = "Commercio"
 		screen.__init__(self,titre)
 
 		Main = main(self,bg_color)

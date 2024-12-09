@@ -9,8 +9,6 @@ from lib.Pyweb.Main_Layout import Main_Layout
 
 from Prog.general.Prog import Main as Ac_Main
 
-from Prog.Services.Service_surf import Services_lay
-
 from color import *
 
 class main(Main_Layout):

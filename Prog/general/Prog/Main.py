@@ -13,43 +13,26 @@ from color import *
 import urllib
 
 from .Accueil.Accueil import Main
-from .Accueil.Inscription import Inscription,General
-from ...Client.Prog.ACC import ACC
-from ...Services.Ser_Main import Ser_main
 
 class main(Layout):
 	def __init__(self,parent):
 		size = 1,1
-		col = AFF_COL
+		col = DISABLE_BUT3
 		pos = 0,0
 		Layout.__init__(self,size,col,pos,parent)
 
 		self.Ret = "Accueil"
 		self.Ins_ind = int()
 
-		self.Base = General()
-
 		self.Accueil = Main(self.parent)
-		self.Inscrip = Inscription(self.parent)
 
 		self.part_dic = {
 			"Accueil":self.Accueil,
-			"INSC":self.Inscrip,
-			"SERV":Ser_main(self),
 		}
 		self.Curent_surf = self.Accueil
-		#self.Service = 
 
 	def Acc_def(self):
-		"""
-			C'est ici que je vais définir le swicht
-			des connexions
-		"""
-		if self.MAIN_LAY.Get_ident_cookies():
-			Acc = ACC(self.parent)
-			self.Curent_surf = Acc
-		else:
-			self.Curent_surf = self.Accueil
+		self.Curent_surf = self.Accueil
 
 	def Part_set(self,part_request):
 		part_request = part_request.split("-")
@@ -107,10 +90,4 @@ class main(Layout):
 			self.Curent_surf.Execution(request)
 
 		self.add_all()
-
-	def Ret_handler(self,ret):
-		if ret:
-			if type(ret) == list:
-				if "Conn" == ret[0]:
-					self.Connexion_handler()
 

@@ -11,260 +11,279 @@ import urllib
 
 class Main(Layout):
 	def __init__(self,parent):
-		size = 1,1
-		bg_color = APP_COL
-		pos = (0,0)
+		size = 90,98
+		bg_color = AFF_COL
+		pos = (5,1.2)
 		Layout.__init__(self,size,bg_color,pos,parent)
-
-		self.present_size = .7,.6
-		self.present_pos = .025,.05
-		self.present_col = OPTION_COL
-
-		self.Connexion_size = .225,.55
-		self.Connexion_pos = .75,.075
-		self.Connexion_col = AFF_COL
-
-		self.Services_size = .7,.25
-		self.Services_pos = self.present_pos[0],.7
-		self.Services_col = AFF_COL
-
-		self.Services_T_size = (self.Connexion_size[0],
-			self.Services_size[1])
-		self.Services_T_pos = (self.Connexion_pos[0],
-			self.Services_pos[1])
-		self.Services_T_col = self.Get_bg_color()
-
-#
-		self.Present = Present(self)
-		self.Connexion = Connexion(self)
-		self.Services = Services(self)
-		self.Services_T = Services_T(self)
-
-		self.add_all()
-
-	def Foreign_surf(self):
-		
-		self.Set_cont_obj(self.Present)
-		self.Set_cont_obj(self.Connexion)
-		self.Set_cont_obj(self.Services)
-		self.Set_cont_obj(self.Services_T)
-
-	def Set_error(self,mes):
-		self.Connexion.Error_txt = mes
-		self.Connexion.add_all()
-		self.add_all()
-
-class Present(Layout):
-	def __init__(self,parent):
-		size = parent.present_size
-		pos = parent.present_pos
-		col = parent.present_col
-		Layout.__init__(self,size,col,pos,parent.parent)
-
-		self.CSS()
-		self.Render()
-
-	def CSS(self):
-		self.log_css = Css()
-		self.log_css.Set_size("200px","200px")
-		self.log_css.Set_position((2.5,5))
-
-	def Render(self):
-		logo = bl.image(TEXT.LOGO,
-			"logo Rupin")
-		logo.Set_style(self.log_css)
-		logo.Set_border_radius(30)
-		logo.Set_box_shadow(2,AFF_COL)
-
-		Descip = Layout((.6,.3),None,
-			("250px",10),self)
-		Descip.add_title('Le Rupin',(.8,.2),(.1,0),
-			bg_color = None,text_color = TEXT_COL2)
-		Descip.add_Text("Bref description",(.8,.8),(.1,.22),bg_color = None
-			,font_size = .9,text_color = TEXT_COL2,)
-
-		Object = Layout((.96,.5),None,
-			(2.5,"210px"),self)
-		Object.add_title('Notre objectif',(.8,.1),(.1,0),
-			bg_color = None,text_color = TEXT_COL2,)
-		Object.add_Text("L'objectif de votre organisation",(.8,.8),(.1,.15)
-			,bg_color = None,font_size = .9
-			,text_color = TEXT_COL2)
-
-		self.Set_cont_obj(logo)
-		self.Set_cont_obj(Descip)
-		self.Set_cont_obj(Object)
-
-class Connexion(Layout):
-	def __init__(self,parent):
-		size = parent.Connexion_size
-		pos = parent.Connexion_pos
-		col = parent.Connexion_col
-		Layout.__init__(self,size,col,pos,parent.parent)
-		self.Error_txt = str()
-
-		self.add_all()
-
-	def Foreign_surf(self):
-		self.add_Text(TEXT.Con,(1,.3),(0,0),
-			text_color = TEXT_COL2,text_align = 'center',
-			font_size = .86)
-
-		F_css = Css()
-		F_css.Set_size(1,.4)
-		F_css.Set_position((0,30))
-		F_css.Set_bg_color(AFF_COL)
-
-		inp_css = Css()
-		inp_css.Set_size(.55,.2)
-		inp_css.Set_position((32,0))
-		inp_css.Set_bg_color(APP_COL)
-		inp_css.Set_border(1,AFF_COL)
-		inp_css.Set_text_color(TEXT_COL2)
-
-		lab_css = Css()
-		lab_css.Set_size(.3,.15)
-		lab_css.Set_position((0,5))
-		lab_css.Set_text_color(TEXT_COL2)
-		lab_css.Set_display("block")
-		lab_css.Set_text_align('right')
-		lab_css.Set_font_size(.8)
-
-		self.F = form.form("Connexion","Connexion",action="/Accueil/Conn")
-		self.F.Set_style(F_css)
-		self.F.Set_email_input(TEXT.EMAIL,inp_style = inp_css,
-			lab_style = lab_css)
-		#lab_css = Css()
-		lab_css.Set_size(.3,.15)
-		lab_css.Set_display("block")
-		lab_css.Set_text_align('right')
-		lab_css.Set_font_size(.8)
-		lab_css.Set_position((0,35))
-
-		#inp_css = Css()
-		inp_css.Set_size(.55,.2)
-		inp_css.Set_position((32,30))
-		self.F.Set_password_input(TEXT.PASS,inp_style = inp_css,
-			lab_style = lab_css)
-
-		#inp_css = Css()
-		inp_css.Set_size(.7,.23)
-
-		inp_css.Set_position((15,65))
-		inp_css.Set_text_color(TEXT_COL3)
-		inp_css.Set_bg_color(BUT_COL1)
-		inp_css.Set_border_radius(2)
-		
-		self.F.End_form(submit_name = TEXT.VALIDER,
-			Submit_style = inp_css)
-
-		self.Set_cont_obj(self.F)
-
-		Conn_Css = Css()
-		Conn_Css.Set_size(.7,.06)
-		Conn_Css.Set_text_color(TEXT_COL3)
-		Conn_Css.Set_font_size(.8)
-		Conn_Css.Set_underline(False)
-		Conn_Css.Set_text_align("center")
-		Conn_Css.Set_position((15,73))
-
-		#L = urllib.parse.urlencode({"request":"SAVE_NEW"})
-		L = "/INSC_0"
-		A = bl.anchor(L,"Pas encode de compte?")
-		A.Set_style(Conn_Css)
-
-		Erro_css = Css()
-		Erro_css.Set_size(1,.2)
-		Erro_css.Set_position((0,7))
-		Erro_css.Set_text_align('center')
-		Erro_css.Set_text_color(ERROR_COL)
-		Erro_css.Set_font_size(.8)
-
-		P = bl.p(self.Error_txt)
-		P.Set_style(Erro_css)
-
-		self.Set_cont_obj(A)
-		self.Set_cont_obj(P)
-
-class Services(Layout):
-	def __init__(self,parent):
-		size = parent.Services_size
-		pos = parent.Services_pos
-		col = parent.Services_col
-		Layout.__init__(self,size,col,pos,parent.parent)
-		self.add_Text(TEXT.SERVICE,(.7,.1),(.15,0),
-			text_color = TEXT_COL4,font_size = .9,
-			)
+		self.Set_box_shadow(20,TEXT_COL2)
 		self.Set_overflow()
-		dic = TEXT.Serv_dic
-		X = 2.5
-		for name,img in dic.items():
-			self.add_service(X,name,img)
-			X+= 22.5
 
-	def add_service(self,X,titre,image):
-		Cont_css = Css()
-		Cont_css.Set_size(.2,.7)
-		Cont_css.Set_position((X,22.5))
-		Cont_css.Set_bg_color(OPTION_COL)
-		Cont_css.Set_display("block")
+		self.image_size = 96,60
+		self.image_pos = 2,0
+		self.Init_all()
+		self.ACCUEIL = True
 
-		bg_img_css = Css()
-		bg_img_css.Set_size(.4,.7)
-		bg_img_css.Set_position((.3,7))
-		bg_img_css.Set_border_radius(20)
+	def Init_all(self):
+		self.ACCUEIL = False
+		self.TELECHA = False
+		self.INSTALA = False
+		self.UTILISA = False
 
-		bg_img = bl.image(image,'img')
-		bg_img.Set_style(bg_img_css)
+	def Foreign_surf(self):
+		if self.ACCUEIL:
+			self.Accueil()
 
-		log_css = Css()
-		log_css.Set_size(.15,.3)
-		log_css.Set_position((2.5,5))
+		elif self.TELECHA:
+			self.Telecha()
 
-		log = bl.image(TEXT.LOGO,"")
-		log.Set_style(log_css)
+		elif self.INSTALA:
+			self.Instala()
+
+		elif self.UTILISA:
+			self.Utilisa()
+
+	def Telecha(self):
+		self.Set_cont_obj(Telechargement(self))
+
+	def Instala(self):
+		self.Set_cont_obj(Installation(self))
+
+	def Utilisa(self):
+		self.Set_cont_obj(Utilisation(self))
+
+	def Accueil(self):
+		self.Set_cont_obj(Image_part(self))
+		self.Menu_set()
+		self.Content()
+
+	def Menu_set(self):
+		menu_size = self.image_size[0],6
+		menu_pos = 2,self.image_size[1]
+		lay = Layout(menu_size,self.Get_bg_color(),menu_pos,
+			self)
+		MENUS = TEXT.MENUS
+		part_w = 100/(len(MENUS)+1)
+		x_dep = X = part_w/(len(MENUS)+1)
+		for M in MENUS:
+			pos = X,0
+			lay.add_button(M,(part_w,1),pos,
+				Info = M,text_align = "center",
+				bg_color = TEXT_COL4,font_size = .8,
+				radius= 10,shadow = 5)
+			X += part_w+x_dep
+		self.Set_cont_obj(lay)
+
+	def Content(self):
+		pos = 2,self.image_size[1]+7
+		Lay = Layout((96,32),self.Get_bg_color(),pos,self)
+		Lay.Set_overflow()
 		
-		T_css = Css()
-		T_css.Set_size(1,.48)
-		T_css.Set_position((0,60))
-		T_css.Set_text_color(TEXT_COL2)
-		T_css.Set_text_align("center")
-		
-		T = bl.p(titre)
-		T.Set_style(T_css)
+		Info = bl.dic()
+		val_css = Css(size = (86,1))
+		val_css.Set_padding_top(2)
+		val_css.Set_text_align('justify')
 
-		g = titre.split(' ')
-		g = "".join(g)
-		L = "/SERV/"+g
 
-		Cont = bl.anchor(L,"")
-		Cont.Set_style(Cont_css)
-		Cont.Set_cont_obj(bg_img)
-		Cont.Set_cont_obj(T)
+		for key,val in TEXT.ACCUEIL.items():
+			Info.Set_terme(key)
+			Info.Set_def(val,val_css)
+		Lay.Set_cont_obj(Info)
 
-		self.Set_cont_obj(Cont)
 
-class Services_T(Layout):
+		self.Set_cont_obj(Lay)
+
+	def Execution(self,request):
+		req = request.get("request")
+		self.Ret_handler(req)
+
+		self.add_all()
+
+	def Ret_handler(self,ret):
+		if ret:
+			if ret == "Téléchargement":
+				self.Init_all()
+				self.TELECHA = True
+			elif ret == 'Installation':
+				self.Init_all()
+				self.INSTALA = True
+			elif ret == 'Utilisation':
+				self.Init_all()
+				self.UTILISA = True
+			else:
+				self.Init_all()
+				self.ACCUEIL = True
+
+class Image_part(Layout):
 	def __init__(self,parent):
-		size = parent.Services_T_size
-		pos = parent.Services_T_pos
-		col = parent.Services_T_col
-		Layout.__init__(self,size,col,pos,parent.parent)
-		
-		self.add_Text(TEXT.Cont_text,(1,.2),(0,0),
-			text_color = TEXT_COL3,font_size = .8,
-			underline = True,text_align = 'center',
-			bg_color = None)
+		size = parent.image_size
+		pos = parent.image_pos
+		col = parent.Get_bg_color()
+		Layout.__init__(self,size,col,pos,parent)
+		self.Set_overflow()
 
-		Y = 15
-		X1 = 0
-		X2 = 30
-		for key,num in TEXT.Contact_dict.items():
-			self.add_Text(key,(X2,.2),(X1,Y),
-				text_color = TEXT_COL4,font_size = .8,
-				bg_color = None)
-			self.add_Text(num,(70,.2),(X2,Y),
-				text_color = TEXT_COL2,font_size = .9,
-				bg_color = None)
-			Y += 20
+
+		self.img_s = 80,87
+		self.img_x = 0
+		self.img_y = 10
+
+		for img,title in TEXT.Img_l:
+			pos = self.img_x,self.img_y
+			self.add_image(img,'',self.img_s,pos,title,
+				radius = 0)
+			self.add_Text(title,(self.img_s[0]-20,6),
+				(pos[0]+10,0),text_align = 'center',
+				radius = 2,shadow = 10)
+			self.img_x += self.img_s[0] + 5
+
+class Telechargement(Layout):
+	def __init__(self,parent):
+		size = 96,98
+		pos = 2,1.1
+		col = parent.Get_bg_color()
+		Layout.__init__(self,size,col,pos,parent)
+		self.add_all()
+
+	def Foreign_surf(self):
+		Y = 13
+		
+		L = Layout((1,1),self.Get_bg_color(),(0,0),self)
+		L.Set_overflow()
+		for key,val in TEXT.TELECHARGEMENT.items():
+			mess,mont,but = val
+			pos = 2,Y
+			L = self.add_part(L,key,mess,mont,but,pos)
+			Y += 43
+
+		self.Set_cont_obj(L)
+
+		self.add_Text('Téléchargement',size = (1,8),
+			pos = (0,0),text_align = 'center',
+			bg_color = TEXT_COL4,font_size = 1,
+			padding_top = 1,shadow = 20,
+			radius = 10)
+
+	def add_part(self,L,titre,mess,mont,but,pos):
+		dic = Layout((96,39),TEXT_COL1,pos,L)
+		dic.Set_box_shadow(10,TEXT_COL2)
+		dic.Set_border_top_left_radius(2)
+		dic.Set_border_bottom_right_radius(2)
+
+		dic.add_Text(titre,(80,10),(0,0),font_size = 1.2,
+			text_color = TEXT_COL3,margin_left = 2)
+		dic.add_Text(mess,(93,50),(5,14),
+			text_align ='justify',font_size = 1)
+
+		L.Set_cont_obj(dic)
+		L.add_button(f"Obtenir le Pack {titre} \
+			<br>à {mont}",(60,12),
+			(0,pos[1]+26),Info = but,web_page = True,
+			margin_left = 20,bg_color = DISABLE_BUT3,
+			text_align = "center",font_size = 1.1,
+			text_color = TEXT_COL1,shadow_inset = True,
+			radius = 40,shadow = 40,
+			shadow_color = TEXT_COL2)
+		return L
+
+class Installation(Layout):
+	def __init__(self,parent):
+		size = 96,98
+		pos = 2,1.1
+		col = parent.Get_bg_color()
+		Layout.__init__(self,size,col,pos,parent)
+		self.add_all()
+
+	def Foreign_surf(self):
+		Y = 3
+		L = Layout((1,58),self.Get_bg_color(),(0,42),self)
+		L.Set_overflow()
+		for key,val in TEXT.INSTALLATION.items():
+			mess,mont = val
+			pos = 2,Y
+			L = self.add_part(L,key,mess,mont,pos)
+			Y += 50
+
+		self.Set_cont_obj(L)
+		self.Info_part()
+
+
+	def Info_part(self):
+		size = 1,40
+		L = Layout(size,self.Get_bg_color,(0,0),self)
+		L.Set_box_shadow(5,TEXT_COL2)
+		L.add_Text(TEXT.INFO_INSTALLATION,(90,80),(5,17),
+			font_size = 1,text_align = 'justify')
+		L.add_Text('Installation',size = (1,15),
+			pos = (0,0),text_align = 'center',
+			bg_color = TEXT_COL4,font_size = 1,
+			padding_top = 1,shadow = 20,
+			radius = 10)
+		self.Set_cont_obj(L)
+
+	def add_part(self,L,titre,mess,mont,pos):
+		dic = Layout((96,45),TEXT_COL1,pos,L)
+		dic.Set_box_shadow(10,TEXT_COL2)
+		dic.Set_border_top_left_radius(2)
+		dic.Set_border_bottom_right_radius(2)
+
+		T = f"{titre}: <i>{mess}</i>"
+		dic.add_Text(T,(80,10),(0,0),font_size = 1.2,
+			text_color = TEXT_COL3,margin_left = 2)
+		dic.add_Text(mont,(93,50),(5,14),
+			text_align ='justify',font_size = 1)
+
+		L.Set_cont_obj(dic)
+		
+		return L
+
+
+
+class Utilisation(Layout):
+	def __init__(self,parent):
+		size = 96,98
+		pos = 2,1.1
+		col = parent.Get_bg_color()
+		Layout.__init__(self,size,col,pos,parent)
+		self.add_all()
+
+	def Foreign_surf(self):
+		Y = 3
+		L = Layout((1,78),self.Get_bg_color(),(0,22),self)
+		L.Set_overflow()
+		for key,val in TEXT.UTILISATION.items():
+			mess = val
+			pos = 2,Y
+			L = self.add_part(L,key,mess,pos)
+			Y += 50
+
+		self.Set_cont_obj(L)
+		self.Info_part()
+
+
+	def Info_part(self):
+		size = 1,20
+		L = Layout(size,self.Get_bg_color,(0,0),self)
+		L.Set_box_shadow(5,TEXT_COL2)
+		L.add_Text(TEXT.INFO_UTILISATION,(90,80),(5,37),
+			font_size = 1,text_align = 'justify')
+		L.add_Text('Utilisation',size = (1,35),
+			pos = (0,0),text_align = 'center',
+			bg_color = TEXT_COL4,font_size = 1,
+			padding_top = 1,shadow = 20,
+			radius = 10)
+		self.Set_cont_obj(L)
+
+	def add_part(self,L,titre,mess,pos):
+		dic = Layout((96,45),TEXT_COL1,pos,L)
+		dic.Set_box_shadow(10,TEXT_COL2)
+		dic.Set_border_top_left_radius(2)
+		dic.Set_border_bottom_right_radius(2)
+
+		dic.add_Text(titre,(80,10),(0,0),font_size = 1.2,
+			text_color = TEXT_COL3,margin_left = 2)
+		dic.add_Text(mess,(93,50),(5,14),
+			text_align ='justify',font_size = 1)
+
+		L.Set_cont_obj(dic)
+		
+		return L
 

@@ -26,6 +26,8 @@ class style:
 	#
 		self.cont = str()
 		self.Css_dict = dict()
+		self.width = 100
+		self.height = 100
 
 		
 		if pos:

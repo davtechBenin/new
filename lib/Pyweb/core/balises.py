@@ -157,10 +157,18 @@ class head(balise):
 \n\t<meta name="viewport" content="width=device-width" initial-scale="1">\
 \n\t<title>{self.titre}</title>"""
 		self.Cont = mi
+		self.Set_font()
 
 	def Set_css_file(self,file_name):
 		a = f'\n\t<link rel = "{self.rel}" type="text/css" href="{file_name}"/>'
 		self.Cont += a
+
+	def Set_font(self):
+		f = "\n\t<style>\n\t\t\
+@font-face{\n\t\t\tfont-family:'Lexend';\
+\n\t\t\tfont-weight:400;\n\t\t\tsrc:url('/static/Lexend.ttf') format('truetype')\n\t\t}\
+\n\t</style>"
+		self.Cont += f
 
 class header(balise):
 	def __init__(self,**style_args):

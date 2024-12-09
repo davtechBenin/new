@@ -71,7 +71,12 @@ class wid(div):
 		italic = False,bold = 100,underline = False,
 		text_color = (0,0,0),bg_color = None,
 		text_align = 'left',font_name = list(),
-		bal_name = "p",style_obj =None):
+		bal_name = "p",shadow = 0,
+		shadow_color = (0,0,0),radius = 0,
+		padding_top = 0,padding_left = 0,
+		padding_right = 0,padding_bottom = 0,
+		margin_left = 0,margin_typ = "%",
+		style_obj =None):
 	#
 		if bg_color == None:
 			bg_color = self.Get_bg_color()
@@ -86,11 +91,20 @@ class wid(div):
 		S.Set_underline(underline)
 		S.Set_text_align(text_align)
 		S.Set_text_color(text_color)
+		S.Set_padding_top(padding_top)
+		S.Set_padding_left(padding_left)
+		S.Set_padding_right(padding_right)
+		S.Set_padding_bottom(padding_bottom)
+		if margin_left:
+			S.Set_margin_left(margin_left,margin_typ)
 		if style_obj:
 			S.Set_style(style_obj)
 		Text_obj = balise(bal_name)
 		Text_obj.Set_cont_obj(text)
 		Text_obj.Set_style(S)
+		if shadow:
+			Text_obj.Set_box_shadow(shadow,shadow_color)
+		Text_obj.Set_border_radius(radius)
 		self.Set_cont_obj(Text_obj)
 
 	def Add_priority_lay(self,Lay):
@@ -108,7 +122,9 @@ class wid(div):
 		bg_color = tuple(),x_dec = 0,inner_x_dec = 0,
 		radius = None,style_obj = None,
 		shadow = 0,shadow_color = (0,0,0),
-		inner_y_dec = 0,
+		inner_y_dec = 0,web_page = False,
+		margin_left = 0,margin_typ = "%",
+		shadow_inset = False,
 		**wid_args):
 	#
 		if not bg_color:
@@ -127,11 +143,14 @@ class wid(div):
 		S.Set_display('block')
 		S.Set_margin_left(x_dec)
 		if shadow:
-			S.Set_box_shadow(shadow,shadow_color)
+			S.Set_box_shadow(shadow,shadow_color,
+				inset = shadow_inset)
 		if radius:
 			S.Set_border_radius(radius)
 		if style_obj:
 			S.Set_style(style_obj)
+		if margin_left:
+			S.Set_margin_left(margin_left,margin_typ)
 		
 		if not Info:
 			Info = text
@@ -140,7 +159,10 @@ class wid(div):
 		T = p(text)
 		T.Set_padding_left(inner_x_dec)
 		T.Set_padding_top(inner_y_dec)
-		but_obj = anchor(f"/?{href}",T.Run_html())
+		if not web_page:
+			but_obj = anchor(f"/?{href}",T.Run_html())
+		else:
+			but_obj = anchor(f"{Info}",T.Run_html())
 		but_obj.Set_style(S)
 		if New_page:
 			but_obj.Set_target()
